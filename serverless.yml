@@ -1,0 +1,16 @@
+service: restApi
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  stage: dev
+  runtime: nodejs18.x
+  region: us-east-1
+
+functions:
+  api:
+    handler: handler.handler
+    events:
+      - http: ANY /{proxy+}
+      - http: ANY /
+    
