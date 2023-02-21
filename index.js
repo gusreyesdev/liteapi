@@ -18,9 +18,9 @@ app.use('/companies', require('./routes/companies'));
 app.use('/inventory', require('./routes/inventory'));
 
 app.listen(process.env.PORT, async () => {
-  //await configDB.sync();
-
-  await configDB.sync({ alter:true });
+  await configDB.sync();
+  
+  //await configDB.sync({ alter:true });
 
   console.log(`servidor corriendo en puerto ${process.env.PORT} `);
 });

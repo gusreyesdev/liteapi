@@ -2,6 +2,7 @@ const { response } = require("express");
 const bcrypt = require("bcryptjs");
 
 const User = require("../models/User");
+const { generateJWT } = require("../helpers/jwt");
 
 const newUser = async (req, res = response) => {
   const { name, email, password, ProfileId } = req.body;
@@ -18,11 +19,15 @@ const newUser = async (req, res = response) => {
 
       user = await User.create(user.dataValues);
 
+      const token = await generateJWT(user.id, user.name, user.ProfileId);
+
       res.status(201).json({
         ok: true,
         id: user.id,
+        name: user.name,
+        ProfileId: user.ProfileId,
+        token,
       });
-
     } else {
       return res.status(400).json({
         ok: false,
@@ -55,9 +60,14 @@ const login = async (req, res = response) => {
         });
       }
 
+      const token = await generateJWT(user.id, user.name, user.ProfileId);
+
       res.status(201).json({
         ok: true,
         id: user.id,
+        name: user.name,
+        ProfileId: user.ProfileId,
+        token,
       });
     } else {
       return res.status(400).json({
@@ -75,7 +85,22 @@ const login = async (req, res = response) => {
   }
 };
 
+const reviveToken = async (req, res = response) => {
+  const { id, name, ProfileId } = req;
+
+  const token = await generateJWT(id, name, ProfileId);
+
+  res.json({
+    ok: true,
+    id,
+    name,
+    ProfileId,
+    token,
+  });
+};
+
 module.exports = {
   newUser,
   login,
+  reviveToken,
 };

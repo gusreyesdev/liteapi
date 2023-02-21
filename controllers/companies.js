@@ -1,5 +1,6 @@
 const { response } = require("express");
 const Company = require("../models/Company");
+const Inventory = require("../models/Inventory");
 
 const createCompanies = async (req, res = response) => {
   const { nit, name, address, phone, UserId } = req.body;
@@ -137,9 +138,19 @@ const getCompaniesByUser = async (req, res = response) => {
       },
     });
 
+    const nitCompany = JSON.stringify(company[0].nit)
+
+    let items = await Inventory.findAll({
+      where:{
+        CompanyNit: nitCompany
+      }
+    })
+    
+
     res.status(201).json({
       ok: true,
       company,
+      items
     });
   } catch (error) {
     console.log("error get all companies by user ", error);
