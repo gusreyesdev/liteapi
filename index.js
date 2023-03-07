@@ -14,12 +14,16 @@ app.use(express.json());
 
 app.use("/auth", require("./routes/auth"));
 app.use("/profiles", require("./routes/profiles"));
-app.use('/companies', require('./routes/companies'));
-app.use('/inventory', require('./routes/inventory'));
+app.use("/companies", require("./routes/companies"));
+app.use("/inventory", require("./routes/inventory"));
+
+app.get("*", (req, res) => {
+  res.sendFile(__dirname + '/public/index.html');
+});
 
 app.listen(process.env.PORT, async () => {
   await configDB.sync();
-  
+
   //await configDB.sync({ alter:true });
 
   console.log(`servidor corriendo en puerto ${process.env.PORT} `);
