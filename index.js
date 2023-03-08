@@ -16,6 +16,7 @@ app.use("/auth", require("./routes/auth"));
 app.use("/profiles", require("./routes/profiles"));
 app.use("/companies", require("./routes/companies"));
 app.use("/inventory", require("./routes/inventory"));
+app.use("/user", require("./routes/user"))
 
 app.get("*", (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
